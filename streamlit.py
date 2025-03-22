@@ -20,35 +20,41 @@ with open("models/DTmodel.pkl", "rb") as pkl:
 with st.form("user_inputs"):
     st.subheader("Real Estate Details")
     
-    # Year Sold 
-    year_sold = st.slider("Select transaction year", min_value=1990, max_value=2025)
+    # create 2 columns
+    col1, col2 = st.columns(2)
     
-    # Property Tax
-    property_tax = st.number_input("Property Tax",value=0)
+    with col1:
+        # Year Sold 
+        year_sold = st.slider("Select transaction year", value=2007, min_value=1993, max_value=2016)
+        
+        # Property Tax
+        property_tax = st.number_input("Property Tax",value=467, max_value=4500, step=100)
 
-    # Insurance
-    insurance = st.number_input("Insurance",value=0)
+        # Insurance
+        insurance = st.number_input("Insurance",value=140, max_value=1400, step=100)
 
-    # Beds
-    beds = st.selectbox("Number of bedrooms", ["1", "2", "3", "4", "5"])
+        # Beds
+        beds = st.selectbox("Number of bedrooms", ["1", "2", "3", "4", "5"])
 
-    # Baths
-    baths = st.selectbox("Number of bathrooms", ["1", "2", "3", "4", "5", "6"])
+        # Baths
+        baths = st.selectbox("Number of bathrooms", ["1", "2", "3", "4", "5", "6"])
 
-    # sqft
-    sqft = st.number_input("Sqft of the property", min_value=500, max_value=9000)
+    with col2:
+        # sqft
+        sqft = st.number_input("Sqft of the property", value = 2300, min_value=500, max_value=9000, step=100)
 
-    # Year Built
-    year_built = st.slider("Select built year", min_value=1880, max_value=2025)
+        # Year Built
+        year_built = st.slider("Select built year", value= 1982, min_value=1880, max_value=2015)
     
-    # Lot Size
-    lot_size = st.number_input("Lot Size", min_value=0, max_value=500000, value=0)
     
-    # Basement
-    basement = st.selectbox("Basement", options=["1", "0"])
-    
-    # Property Type
-    property_type = st.selectbox("Property Type", options=["Bunglow", "Condo"])
+        # Lot Size
+        lot_size = st.number_input("Lot Size", min_value=0, max_value=500000, value=0, step=100)
+        
+        # Basement
+        basement = st.selectbox("Basement", options=["1", "0"])
+        
+        # Property Type
+        property_type = st.selectbox("Property Type", options=["Bunglow", "Condo"])
     
     # Submit button
     submitted = st.form_submit_button("Predict Property Price")
@@ -91,7 +97,7 @@ if submitted:
 
     # Display result
     st.subheader("Prediction Result:")
-    st.write(f"The predicted price is: ${new_prediction[0]}")
+    st.write(f"The predicted price is: ${int(new_prediction[0]):,}")
     
 
 st.write(
