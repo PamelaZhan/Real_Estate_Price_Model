@@ -48,7 +48,7 @@ with st.form("user_inputs"):
     
     
         # Lot Size
-        lot_size = st.number_input("Lot Size", min_value=0, max_value=500000, value=0, step=100)
+        lot_size = st.number_input("Lot Size", min_value=0, max_value=500000, value=13000, step=1000)
         
         # Basement
         basement = st.selectbox("Basement", options=["1", "0"])
