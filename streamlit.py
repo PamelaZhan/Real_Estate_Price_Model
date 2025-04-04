@@ -12,8 +12,8 @@ based on various property characteristics.
 """)
 
 # Load the pre-trained model
-with open("models/DTmodel.pkl", "rb") as pkl:
-    dt_model = pickle.load(pkl)
+with open("models/RFmodel.pkl", "rb") as pkl:
+    rf_model = pickle.load(pkl)
 
 
 # Prepare the form to collect user inputs
@@ -93,7 +93,7 @@ if submitted:
     )
 
     # Make prediction
-    new_prediction = dt_model.predict(prediction_input)
+    new_prediction = rf_model.predict(prediction_input)
 
     # Display result
     st.subheader("Prediction Result:")
@@ -101,7 +101,7 @@ if submitted:
     
 
 st.write(
-    """We used a machine learning (Decistion Tree) model to predict your property price,
+    """A Random Forest Regression model is used to predict your property price,
     the features used in this prediction are ranked by relative importance below."""
 )
 st.image("feature_importance.png")

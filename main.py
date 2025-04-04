@@ -2,7 +2,7 @@
 from src.data.load_dataset import load_and_preprocess_data
 from src.features.build_features import create_indicator_dummy_vars
 from src.visualization.visualize import plot_correlation_heatmap, plot_feature_importance, plot_decision_tree
-from src.models.train_model import train_DTmodel
+from src.models.train_model import train_RFmodel
 from src.models.predict_model import evaluate_model
 import pandas as pd
 
@@ -15,7 +15,7 @@ if __name__ == "__main__":
     x, y = create_indicator_dummy_vars(df)
 
     # Train the dicision tree regression model
-    model, x_test, y_test = train_DTmodel(x, y)
+    model, x_test, y_test = train_RFmodel(x, y)
 
 
 
