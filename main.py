@@ -26,7 +26,6 @@ if __name__ == "__main__":
         # Plot
         plot_correlation_heatmap(pd.merge(y,x, left_index=True, right_index=True))
         plot_feature_importance(model, x)
-        plot_decision_tree(model)
     else:
         print(f"The mean absolute error is over 70000. It is not fit.")
 
