@@ -3,6 +3,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pickle
 import streamlit as st
+import lime
+from lime import lime_tabular
 
 # Set the page title and description
 st.title("Real Estate Price Predictor")
@@ -15,6 +17,9 @@ based on various property characteristics.
 with open("models/RFmodel.pkl", "rb") as pkl:
     rf_model = pickle.load(pkl)
 
+# Load the explainer
+with open("models/xtrain.pkl", "rb") as file:
+    x_train = pickle.load(file)
 
 # Prepare the form to collect user inputs
 with st.form("user_inputs"):
@@ -98,6 +103,43 @@ if submitted:
     # Display result
     st.subheader("Prediction Result:")
     st.write(f"The predicted price is: ${int(new_prediction[0]):,}")
+
+    # create explainer object
+    LIMEexplainer = lime_tabular.LimeTabularExplainer(
+            training_data=x_train,
+            feature_names=["year_sold", "property_tax", "insurance", "beds", "baths", "sqft", "year_built", "lot_size", 
+                                    "basement", "popular", "recession", "property_age", "property_type_Bunglow", "property_type_Condo"],
+            mode='regression'
+    )
+    # Generate explanation instance
+    exp = LIMEexplainer.explain_instance(
+        data_row=prediction_input.iloc[0],                 
+        predict_fn=rf_model.predict,           # Model's prediction function
+        num_features=14                      # Number of features to include in explanation
+    )
+    # Convert explanation to a matplotlib figure
+    fig = exp.as_pyplot_figure()  
+    # Get feature importances from the explanation
+    importances = [x[1] for x in exp.as_list()]  # Feature importance values
+    importances.reverse()
+
+    # Annotate each bar with its corresponding importance value
+    for i, importance in enumerate(importances, start=0):
+        plt.text(
+            importance,  # x-coordinate of the bar (importance value)
+            i,  # y-coordinate (corresponding bar)
+            f'{importance:.0f}',  # Display importance value 
+            ha='center',  # Align text horizontally 
+            va='baseline',  # Align text vertically 
+            fontsize=10,  # Font size for the annotation
+            color='black'  # Text color
+        )
+    # Display explanation in Streamlit
+    st.subheader("LIME Explanation for Prediction")
+    st.pyplot(fig)
+
+    st.subheader("Feature Contributions:")
+    st.table(pd.DataFrame(exp.as_list(), columns=["Feature", "Importance"]))
     
 
 st.write(

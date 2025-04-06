@@ -6,6 +6,7 @@ from sklearn.metrics import mean_absolute_error
 import pickle
 from ..logging.logging import logging_decorator
 
+
 @logging_decorator
 # Function to train the model
 def train_DTmodel(x, y):
@@ -46,9 +47,16 @@ def train_RFmodel(x, y):
     ytrain_pred = rfmodel.predict(x_train)
     # evaluate the model
     train_mae = mean_absolute_error(ytrain_pred, y_train)
+
+    
        
     # Save the trained model
     with open('models/RFmodel.pkl', 'wb') as f:
         pickle.dump(rfmodel, f)
+
+    
+    # Save the train data
+    with open('models/xtrain.pkl', 'wb') as f:
+        pickle.dump(x_train.values, f)
 
     return rfmodel, x_test, y_test
